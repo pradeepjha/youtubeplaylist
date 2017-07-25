@@ -1,0 +1,9 @@
+name = "Youtube Playlist videos"
+description = "Youtube playlist videos"
+core = 7.x
+package = custom
+files[] = youtubeplaylist.module
+
+
+
+

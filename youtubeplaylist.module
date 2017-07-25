@@ -1,0 +1,66 @@
+<?php
+
+
+/**
+ * Implements hook_block_info().
+ */
+function youtubeplaylist_block_info() {
+  $blocks = array();
+  $blocks[0] = array(
+    'info' => t('Youtube playlist videos'),
+    'status' => 1,
+    'region' => 'sidebar_first',
+  );
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function youtubeplaylist_block_view($delta = '') {
+  $block = array();
+  if ($delta == 0) {
+    $block['subject'] = t('Youtube playlist videos');
+    $block['content'] = youtubeplaylist_getview();
+    return $block;
+  }
+}
+
+
+// function to get all videos of a playlist
+
+function youtubeplaylist_getview(){
+ 
+$cont = json_decode(file_get_contents('https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=20&playlistId=PLb77XCLwpLASEu1H1d047AG-UoxaOB_V3&key=AIzaSyBn6TXTCUObNJmbLWBlS-f3Y7ctRdWPEII'));
+$feed = $cont->items;
+
+  if(count($feed)){ 
+
+    drupal_add_css(drupal_get_path('module', 'youtubeplaylist') . '/css/youtubechannel.css');
+    drupal_add_js(drupal_get_path('module', 'youtubeplaylist') . '/js/youtubechannel.js');
+   
+    $videos="<div id='youtubechannel-player' style=' width: 100%; height: 100%;' >";
+    $videos.="<iframe id='youtubechannel-frame' title='Youtube Video Player' width='360' height='274' src='' frameborder='' allowfullscreen></iframe></div>";
+    $videos.="<div id='youtubechannel-list' style='width: 100%;height: 66px;margin-bottom: 27px;'>";
+
+    foreach($feed as $item){
+           $youtube_id = $item->snippet->resourceId->videoId;
+          $image_variables = array(
+            'path' => "http://i4.ytimg.com/vi/{$youtube_id}/default.jpg",
+            );
+          $thumb = theme('image', $image_variables);
+
+          $videos.="<ul> <li> <a href=".$youtube_id.">". $thumb."</a></li></ul>";
+    }
+    $videos.="</div>";
+  }
+ 
+    return $videos;
+
+
+
+
+ }
+
+
+
