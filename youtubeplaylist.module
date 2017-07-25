@@ -31,7 +31,7 @@ function youtubeplaylist_block_view($delta = '') {
 
 function youtubeplaylist_getview(){
  
-$cont = json_decode(file_get_contents('https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=20&playlistId=PLb77XCLwpLASEu1H1d047AG-UoxaOB_V3&key=AIzaSyBn6TXTCUObNJmbLWBlS-f3Y7ctRdWPEII'));
+$cont = json_decode(file_get_contents('https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=20&playlistId=<playlist-id>&key=<key-value>'));
 $feed = $cont->items;
 
   if(count($feed)){ 
